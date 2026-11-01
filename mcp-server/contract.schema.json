@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jvben.cn/contract/1.3/contract.schema.json",
+  "title": "AI剧本网 上下文契约 1.2",
+  "$comment": "配套文档 docs/CONTEXT_CONTRACT.md。两件东西各自冻结：$defs/PromptBundle（组装出来的系统提示词）与 $defs/SessionData（云端会话结构）。校验单个产物用 --ref 指定，见 docs/schema/README.md。",
+  "oneOf": [
+    { "$ref": "#/$defs/PromptBundle" },
+    { "$ref": "#/$defs/SessionData" }
+  ],
+
+  "$defs": {
+
+    "PromptBundle": {
+      "title": "系统提示词组装结果（PromptBuilder.build 的返回值解析后）",
+      "description": "两层：顶层是「工作流程」，其余全在「资料库」里。任一层的键都可能因为内容为空而整体缺席——空节不输出，而不是输出空字符串。",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "工作流程（最高优先级，务必逐级严格遵循）": { "$ref": "#/$defs/SectionValue" },
+        "资料库（按需查阅）": { "$ref": "#/$defs/Library" }
+      }
+    },
+
+    "Library": {
+      "title": "资料库（按需查阅）",
+      "description": "键是槽位名（逐字照抄，中文，不许翻译/改名），值是该槽位的内容。槽位是否出现取决于该状态下这些分节有没有内容。",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "A 角色设定": { "$ref": "#/$defs/SectionValue" },
+        "B 铁律": { "$ref": "#/$defs/SectionValue" },
+        "C 网页面板引导": { "$ref": "#/$defs/GroupDefaultC" },
+        "C 侧边栏引导": { "$ref": "#/$defs/GroupBrowsingC" },
+        "C 模式规则": { "$ref": "#/$defs/SectionValue" },
+        "D 工具手册": { "$ref": "#/$defs/SectionValue" },
+        "D 剧本内容": { "$ref": "#/$defs/SectionValue" },
+        "E 线索/道具面板": { "$ref": "#/$defs/SectionValue" },
+        "F 标记手册": { "$ref": "#/$defs/SectionValue" },
+        "输出规范": { "$ref": "#/$defs/SectionValue" },
+        "G 表情/动画清单": { "$ref": "#/$defs/SectionValue" },
+        "H 状态栏 UI": { "$ref": "#/$defs/SectionValue" },
+        "I 玩家信息": { "$ref": "#/$defs/SectionValue" }
+      }
+    },
+
+    "GroupDefaultC": {
+      "title": "默认态 · C 网页面板引导（多分节组，永远是对象）",
+      "description": "分节 [guide, greeting]。子键名固定为「网页面板引导」「开场规则」；某一节为空则该子键缺席。",
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "网页面板引导": { "$ref": "#/$defs/SectionValue" },
+        "开场规则": { "$ref": "#/$defs/SectionValue" }
+      }
+    },
+
+    "GroupBrowsingC": {
+      "title": "浏览态 · C 侧边栏引导（多分节组，永远是对象）",
+      "description": "分节 [sidebar_guide|guide, greeting]。注意：即使 sidebar_guide 为空、回退到了 guide，子键名仍然是「侧边栏状态引导」——取的是回退链左边的名字。",
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "侧边栏状态引导": { "$ref": "#/$defs/SectionValue" },
+        "开场规则": { "$ref": "#/$defs/SectionValue" }
+      }
+    },
+
+    "SectionValue": {
+      "title": "一个分节的内容",
+      "description": "提示词文件正文若是合法 JSON 就解析成对象，否则按原文嵌入（字符串）。同一 prompt_type 下有多份文件（如 NPC 私有 tools + 共享 tools）时合并为数组，顺序 = 后端下发顺序。",
+      "anyOf": [
+        { "type": "string" },
+        { "type": "object" },
+        {
+          "type": "array",
+          "minItems": 2,
+          "items": { "anyOf": [{ "type": "string" }, { "type": "object" }] }
+        }
+      ]
+    },
+
+    "SessionData": {
+      "title": "云端会话结构 session_data（schema=2）",
+      "description": "改这个结构 = 改 schema 版本号，不许悄悄加字段。读低版本时按默认值补齐，只为兼容旧会话。",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "phase", "owner_user_id", "script_id", "npc_id", "mode", "inventory", "cond_counts", "task_counts", "narrated", "last_words_used", "turn_lock"],
+      "properties": {
+        "schema": { "const": 2 },
+        "phase": { "enum": ["hosting", "settling", "ended"] },
+        "owner_user_id": { "type": "string", "minLength": 1, "description": "开房玩家。host 主体没有 user 身份，玩家信息/配额一律取这个字段。" },
+        "script_id": { "type": "string" },
+        "npc_id": { "type": "string" },
+        "mode": { "enum": ["turtle_soup", "dnd", "coc", "script_acting"] },
+        "inventory": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["clue", "item"],
+          "properties": {
+            "clue": { "type": "array", "items": { "type": "string" }, "description": "序号 = 下标 + 1，与 [sys:remove_clue:index=n] 对应" },
+            "item": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "cond_counts": { "type": "object", "description": "键是「结局ID.条件ID」，值是计数。同一键只增一次（幂等）。", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "task_counts": { "type": "object", "description": "同上，任务条件。", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "settled_ending": { "type": ["string", "null"] },
+        "ending_type": { "enum": ["win", "lose", null] },
+        "settlement": {
+          "description": "结算产出；null = 未结算。lose 时 locked=true 且不写通关、不发奖励。",
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["recorded"],
+              "properties": {
+                "recorded": { "type": "boolean" },
+                "coins": { "type": "integer", "minimum": 0 },
+                "exp": { "type": "integer", "minimum": 0 },
+                "level": { "type": "integer", "minimum": 1 },
+                "unlocked": { "type": "boolean", "description": "汤底是否解锁。lose 恒为 false。" }
+              }
+            }
+          ]
+        },
+        "narrated": { "type": "boolean", "description": "解说是讲完了。settling → ended 的必要条件。" },
+        "last_words_used": { "type": "integer", "enum": [0, 1], "description": "遗言轮计数。已 ended 但主持证还能用一次的唯一凭据。" },
+        "turn_lock": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["holder", "expires_at"],
+          "properties": {
+            "holder": { "type": ["string", "null"] },
+            "expires_at": { "type": ["string", "null"], "description": "过期即视为无主，进程崩了也能自愈" }
+          }
+        },
+        "revoked_at": { "type": ["string", "null"] },
+        "started_at": { "type": "string" },
+        "last_active_at": { "type": "string" }
+      },
+      "examples": [
+        {
+          "schema": 2, "phase": "hosting",
+          "owner_user_id": "u_abc", "script_id": "5e804ffa8fe4", "npc_id": "jingyuniang", "mode": "turtle_soup",
+          "inventory": { "clue": ["一张褪色的船票"], "item": [] },
+          "cond_counts": { "e1.c1": 1, "e1.c2": 1 }, "task_counts": { "t1.c1": 0 },
+          "settled_ending": null, "ending_type": null, "settlement": null, "narrated": false, "last_words_used": 0,
+          "turn_lock": { "holder": null, "expires_at": null }, "revoked_at": null,
+          "started_at": "2026-10-26T12:40:00Z", "last_active_at": "2026-10-26T13:04:58Z"
+        },
+        {
+          "schema": 2, "phase": "settling",
+          "owner_user_id": "u_abc", "script_id": "5e804ffa8fe4", "npc_id": "jingyuniang", "mode": "turtle_soup",
+          "inventory": { "clue": [], "item": [] },
+          "cond_counts": { "e1.c1": 1, "e1.c2": 1 }, "task_counts": {},
+          "settled_ending": "e1", "ending_type": "win",
+          "settlement": { "recorded": true, "coins": 50, "exp": 100, "level": 3, "unlocked": true },
+          "narrated": false, "last_words_used": 0,
+          "turn_lock": { "holder": "req_9", "expires_at": "2026-10-26T13:05:10Z" }, "revoked_at": null,
+          "started_at": "2026-10-26T12:40:00Z", "last_active_at": "2026-10-26T13:05:00Z"
+        },
+        {
+          "schema": 2, "phase": "ended",
+          "owner_user_id": "u_abc", "script_id": "5e804ffa8fe4", "npc_id": "jingyuniang", "mode": "turtle_soup",
+          "inventory": { "clue": [], "item": [] },
+          "cond_counts": { "e2.c9": 1 }, "task_counts": {},
+          "settled_ending": "e2", "ending_type": "lose",
+          "settlement": { "recorded": true, "unlocked": false },
+          "narrated": true, "last_words_used": 0,
+          "turn_lock": { "holder": null, "expires_at": null }, "revoked_at": "2026-10-26T13:06:00Z",
+          "started_at": "2026-10-26T12:40:00Z", "last_active_at": "2026-10-26T13:06:00Z"
+        }
+      ]
+    }
+  }
+}

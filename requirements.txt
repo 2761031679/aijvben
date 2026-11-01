@@ -1,0 +1,16 @@
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+sqlalchemy>=2.0.25
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+bcrypt>=4.0.0,<4.1.0
+pydantic>=2.5.0
+python-multipart>=0.0.9
+aiofiles>=24.0
+gmssl>=3.2.2
+segno>=1.6.0
+# Site TTS (/api/tts). The web client now defaults to the server-side voice,
+# so without this package the 22 configured Chinese voices are never used and
+# playback silently falls back to the browser's built-in speech synthesis.
+# Soft dependency: backend/routers/tts.py returns 503 when the import fails.
+edge-tts>=6.1.0

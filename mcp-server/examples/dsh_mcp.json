@@ -1,0 +1,19 @@
+{
+  "_说明": "DSH（DeepSeek Harness）/ 自研客户端通用写法：任何『能执行命令 + 说 stdio』的 MCP 客户端都能挂这一段。command 建议写解释器绝对路径（Windows 例：C:/Python312/python.exe），避免客户端的环境变量里没有 PATH。想多个客户端共用一个进程，就改成 url 形式连本机 HTTP 版本（见 README『运行』）。",
+  "mcpServers": {
+    "aijuben": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["-m", "aijuben_mcp.server"],
+      "env": {
+        "AIJUBEN_TOKEN": "mcp_把这里换成你在 AI剧本网 签发的门票",
+        "AIJUBEN_BASE_URL": "https://jvben.cn"
+      }
+    },
+    "aijuben-http": {
+      "_说明": "先把 aijuben-mcp --transport streamable-http --port 8765 起起来，再挂这一段。",
+      "type": "streamable-http",
+      "url": "http://127.0.0.1:8765/mcp"
+    }
+  }
+}

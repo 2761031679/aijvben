@@ -1,0 +1,1773 @@
+{
+  "$comment": [
+    "本文件是「每个接口归谁」的唯一声明处。",
+    "level 取值：public（游客可读）/ user（须登录）/ admin / admin_or_sm / owner。",
+    "host_token：该端点是否强制校验「主持证」——另一个维度，不进 level 比较。",
+    "code_guards / host_token 由 tools/authz/make_manifest.py 从源码刷出，不要手改。",
+    "改完代码请跑：python tools/authz/check.py  —— 声明与代码不一致它会报错。"
+  ],
+  "endpoints": {
+    "DELETE /api/admin/achievements/{achievement_id}": {
+      "code_guards": [
+        "require_admin_or_station_master"
+      ],
+      "file": "backend/routers/stats.py",
+      "func": "admin_delete_achievement",
+      "host_token": false,
+      "level": "admin_or_sm",
+      "line": 229,
+      "note": ""
+    },
+    "DELETE /api/admin/ai-error-reports": {
+      "code_guards": [
+        "require_owner"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "clear_ai_error_reports",
+      "host_token": false,
+      "level": "owner",
+      "line": 298,
+      "note": ""
+    },
+    "DELETE /api/admin/ai-error-reports/{report_id}": {
+      "code_guards": [
+        "require_owner"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "delete_ai_error_report",
+      "host_token": false,
+      "level": "owner",
+      "line": 288,
+      "note": ""
+    },
+    "DELETE /api/admin/announcements/{ann_id}": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "delete_announcement",
+      "host_token": false,
+      "level": "admin",
+      "line": 130,
+      "note": ""
+    },
+    "DELETE /api/admin/npc-issue-reports": {
+      "code_guards": [
+        "require_owner"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "clear_npc_issue_reports",
+      "host_token": false,
+      "level": "owner",
+      "line": 271,
+      "note": ""
+    },
+    "DELETE /api/admin/npc-issue-reports/{report_id}": {
+      "code_guards": [
+        "require_owner"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "delete_npc_issue_report",
+      "host_token": false,
+      "level": "owner",
+      "line": 261,
+      "note": ""
+    },
+    "DELETE /api/admin/npc-prompts/{prompt_id}": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "delete_npc_prompt",
+      "host_token": false,
+      "level": "admin",
+      "line": 193,
+      "note": "**已废弃**：固定 410，同上。"
+    },
+    "DELETE /api/admin/npc-review-logs": {
+      "code_guards": [
+        "require_owner"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "clear_npc_review_logs",
+      "host_token": false,
+      "level": "owner",
+      "line": 244,
+      "note": ""
+    },
+    "DELETE /api/admin/npc-review-logs/{log_id}": {
+      "code_guards": [
+        "require_owner"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "delete_npc_review_log",
+      "host_token": false,
+      "level": "owner",
+      "line": 234,
+      "note": ""
+    },
+    "DELETE /api/admin/trends/{item_id}": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "delete_trend",
+      "host_token": false,
+      "level": "admin",
+      "line": 355,
+      "note": ""
+    },
+    "DELETE /api/scripts/{script_id}": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/scripts.py",
+      "func": "delete",
+      "host_token": false,
+      "level": "user",
+      "line": 115,
+      "note": ""
+    },
+    "DELETE /api/user/mcp-tokens/{token_id}": {
+      "code_guards": [
+        "require_login_not_token"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "delete_mcp_token",
+      "host_token": false,
+      "level": "user",
+      "line": 133,
+      "note": ""
+    },
+    "DELETE /api/user/subscriptions/{script_id}": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "unsubscribe",
+      "host_token": false,
+      "level": "user",
+      "line": 36,
+      "note": ""
+    },
+    "DELETE /api/users/{user_id}/follow": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/stats.py",
+      "func": "unfollow_user",
+      "host_token": false,
+      "level": "user",
+      "line": 133,
+      "note": ""
+    },
+    "GET /": {
+      "code_guards": [],
+      "file": "backend/main.py",
+      "func": "index",
+      "host_token": false,
+      "level": "public",
+      "line": 89,
+      "note": ""
+    },
+    "GET /api/achievements": {
+      "code_guards": [],
+      "file": "backend/routers/stats.py",
+      "func": "list_achievements",
+      "host_token": false,
+      "level": "public",
+      "line": 162,
+      "note": ""
+    },
+    "GET /api/admin/achievements": {
+      "code_guards": [
+        "require_admin_or_station_master"
+      ],
+      "file": "backend/routers/stats.py",
+      "func": "admin_list_achievements",
+      "host_token": false,
+      "level": "admin_or_sm",
+      "line": 169,
+      "note": ""
+    },
+    "GET /api/admin/ai-error-reports": {
+      "code_guards": [
+        "require_owner"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "list_ai_error_reports",
+      "host_token": false,
+      "level": "owner",
+      "line": 280,
+      "note": ""
+    },
+    "GET /api/admin/banners": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "get_banners",
+      "host_token": false,
+      "level": "admin",
+      "line": 68,
+      "note": ""
+    },
+    "GET /api/admin/deleted/items": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "deleted_items",
+      "host_token": false,
+      "level": "admin",
+      "line": 216,
+      "note": ""
+    },
+    "GET /api/admin/free-ai-config": {
+      "code_guards": [
+        "require_owner"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "get_free_ai_config",
+      "host_token": false,
+      "level": "owner",
+      "line": 40,
+      "note": ""
+    },
+    "GET /api/admin/free-trial-config": {
+      "code_guards": [
+        "require_owner"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "get_free_trial_config",
+      "host_token": false,
+      "level": "owner",
+      "line": 51,
+      "note": ""
+    },
+    "GET /api/admin/free-trial-usage": {
+      "code_guards": [
+        "require_owner"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "get_free_trial_usage",
+      "host_token": false,
+      "level": "owner",
+      "line": 61,
+      "note": ""
+    },
+    "GET /api/admin/likes-records/{script_id}": {
+      "code_guards": [
+        "require_owner"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "likes_records",
+      "host_token": false,
+      "level": "owner",
+      "line": 206,
+      "note": ""
+    },
+    "GET /api/admin/npc-configs": {
+      "code_guards": [],
+      "file": "backend/routers/npc_config.py",
+      "func": "list_npc_configs",
+      "host_token": false,
+      "level": "public",
+      "line": 26,
+      "note": "游客：前端初始化要读 NPC 定义与表情/动画效果池。"
+    },
+    "GET /api/admin/npc-configs/init-dirs": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/npc_config.py",
+      "func": "init_directories",
+      "host_token": false,
+      "level": "admin",
+      "line": 78,
+      "note": ""
+    },
+    "GET /api/admin/npc-configs/management": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/npc_config.py",
+      "func": "get_npc_management",
+      "host_token": false,
+      "level": "user",
+      "line": 14,
+      "note": ""
+    },
+    "GET /api/admin/npc-configs/{npc_id}/portraits": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/npc_config.py",
+      "func": "list_npc_portraits",
+      "host_token": false,
+      "level": "admin",
+      "line": 41,
+      "note": ""
+    },
+    "GET /api/admin/npc-issue-reports": {
+      "code_guards": [
+        "require_owner"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "list_npc_issue_reports",
+      "host_token": false,
+      "level": "owner",
+      "line": 253,
+      "note": ""
+    },
+    "GET /api/admin/npc-prompts": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "list_npc_prompts",
+      "host_token": false,
+      "level": "admin",
+      "line": 165,
+      "note": "**已废弃**：返回的 deprecated=true。读的是 npc_prompts 表（线上 28 行历史数据），而提示词的可信源是文件系统，改表不生效。仅为兼容脚本保留。"
+    },
+    "GET /api/admin/npc-review-logs": {
+      "code_guards": [
+        "require_owner"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "list_npc_review_logs",
+      "host_token": false,
+      "level": "owner",
+      "line": 226,
+      "note": ""
+    },
+    "GET /api/admin/owner-logs": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "owner_logs",
+      "host_token": false,
+      "level": "admin",
+      "line": 200,
+      "note": ""
+    },
+    "GET /api/admin/review-prompts": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "list_review_prompts",
+      "host_token": false,
+      "level": "admin",
+      "line": 22,
+      "note": ""
+    },
+    "GET /api/admin/site-settings": {
+      "code_guards": [],
+      "file": "backend/routers/admin.py",
+      "func": "get_all_settings",
+      "host_token": false,
+      "level": "public",
+      "line": 136,
+      "note": "游客：前端启动要读 BGM/轮播图/可见分类。已剔除密钥字段（SECRET_FIELDS）。"
+    },
+    "GET /api/admin/stats": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "stats",
+      "host_token": false,
+      "level": "admin",
+      "line": 34,
+      "note": ""
+    },
+    "GET /api/admin/trends": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "list_trends",
+      "host_token": false,
+      "level": "admin",
+      "line": 307,
+      "note": ""
+    },
+    "GET /api/announcements": {
+      "code_guards": [],
+      "file": "backend/routers/announcements.py",
+      "func": "list_announcements",
+      "host_token": false,
+      "level": "public",
+      "line": 11,
+      "note": ""
+    },
+    "GET /api/announcements/{ann_id}": {
+      "code_guards": [],
+      "file": "backend/routers/announcements.py",
+      "func": "get_announcement",
+      "host_token": false,
+      "level": "public",
+      "line": 24,
+      "note": ""
+    },
+    "GET /api/auth/me": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/auth.py",
+      "func": "me",
+      "host_token": false,
+      "level": "user",
+      "line": 34,
+      "note": ""
+    },
+    "GET /api/game/{script_id}/start": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/game.py",
+      "func": "start_game",
+      "host_token": false,
+      "level": "public",
+      "line": 115,
+      "note": "未过审 423（作者/管理员可试玩）。"
+    },
+    "GET /api/host/session/{session_id}": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/host.py",
+      "func": "get_session",
+      "host_token": true,
+      "level": "public",
+      "line": 179,
+      "note": "该场主持证，或会话主人自己的长期钥匙；其余一律 403。"
+    },
+    "GET /api/host/status": {
+      "code_guards": [],
+      "file": "backend/routers/host.py",
+      "func": "host_status",
+      "host_token": false,
+      "level": "public",
+      "line": 296,
+      "note": "带主持证回本场相位，不带只回 alive+时间；不暴露跨会话聚合数。"
+    },
+    "GET /api/host/ui-meta": {
+      "code_guards": [],
+      "file": "backend/routers/host.py",
+      "func": "get_ui_meta",
+      "host_token": false,
+      "level": "public",
+      "line": 559,
+      "note": ""
+    },
+    "GET /api/notifications": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/notification.py",
+      "func": "list_notifications",
+      "host_token": false,
+      "level": "user",
+      "line": 13,
+      "note": ""
+    },
+    "GET /api/notifications/unread-count": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/notification.py",
+      "func": "unread_count",
+      "host_token": false,
+      "level": "user",
+      "line": 21,
+      "note": ""
+    },
+    "GET /api/npc/check-ban": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/npc.py",
+      "func": "check_ban",
+      "host_token": false,
+      "level": "user",
+      "line": 253,
+      "note": ""
+    },
+    "GET /api/npc/prompts": {
+      "code_guards": [],
+      "file": "backend/routers/npc.py",
+      "func": "get_prompts",
+      "host_token": false,
+      "level": "public",
+      "line": 106,
+      "note": "游客：读的是已废弃的 npc_prompts 表，改了不生效（见 P1-BLOCKERS §3-1）。"
+    },
+    "GET /api/npc/refusal-reports": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/npc.py",
+      "func": "refusal_reports",
+      "host_token": false,
+      "level": "admin",
+      "line": 258,
+      "note": ""
+    },
+    "GET /api/npc/review-prompt": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/npc.py",
+      "func": "get_review_prompt",
+      "host_token": false,
+      "level": "user",
+      "line": 127,
+      "note": ""
+    },
+    "GET /api/npc/review/pending": {
+      "code_guards": [
+        "require_admin_or_station_master"
+      ],
+      "file": "backend/routers/npc.py",
+      "func": "npc_review_pending",
+      "host_token": false,
+      "level": "admin_or_sm",
+      "line": 176,
+      "note": ""
+    },
+    "GET /api/npc/scripts/search": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/npc.py",
+      "func": "search_scripts",
+      "host_token": false,
+      "level": "user",
+      "line": 134,
+      "note": ""
+    },
+    "GET /api/npc/scripts/{script_id}": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/npc.py",
+      "func": "npc_script_detail",
+      "host_token": false,
+      "level": "public",
+      "line": 194,
+      "note": "汤底/条件表**不再无条件下发**（§10.1 收口）。公开字段人人可读；汤底全套只给：该作者/管理员/站长，或有这一场的有效主持证，或登录且在该剧本有未结束会话。按标题模糊搜照旧可用，只回公开字段。"
+    },
+    "GET /api/npc/scripts/{script_id}/reviews": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/npc.py",
+      "func": "script_reviews",
+      "host_token": false,
+      "level": "user",
+      "line": 188,
+      "note": ""
+    },
+    "GET /api/npc/tags": {
+      "code_guards": [],
+      "file": "backend/routers/npc.py",
+      "func": "npc_tags",
+      "host_token": false,
+      "level": "public",
+      "line": 182,
+      "note": ""
+    },
+    "GET /api/npc/trend": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/npc.py",
+      "func": "npc_trend",
+      "host_token": false,
+      "level": "public",
+      "line": 273,
+      "note": ""
+    },
+    "GET /api/npc/user/{user_id}/info": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/npc.py",
+      "func": "user_info",
+      "host_token": false,
+      "level": "user",
+      "line": 232,
+      "note": ""
+    },
+    "GET /api/npc/user/{user_id}/reviews": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/npc.py",
+      "func": "npc_user_reviews",
+      "host_token": false,
+      "level": "user",
+      "line": 168,
+      "note": ""
+    },
+    "GET /api/npc/user/{user_id}/subscriptions": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/npc.py",
+      "func": "npc_user_subscriptions",
+      "host_token": false,
+      "level": "user",
+      "line": 160,
+      "note": ""
+    },
+    "GET /api/npc/user/{user_id}/works": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/npc.py",
+      "func": "npc_user_works",
+      "host_token": false,
+      "level": "user",
+      "line": 152,
+      "note": ""
+    },
+    "GET /api/npc/{npc_id}/sfx": {
+      "code_guards": [],
+      "file": "backend/routers/npc.py",
+      "func": "npc_sfx_manifest",
+      "host_token": false,
+      "level": "public",
+      "line": 75,
+      "note": ""
+    },
+    "GET /api/npc/{npc_id}/sfx/{filename}": {
+      "code_guards": [],
+      "file": "backend/routers/npc.py",
+      "func": "npc_sfx_file",
+      "host_token": false,
+      "level": "public",
+      "line": 92,
+      "note": ""
+    },
+    "GET /api/review/api-review-prompt": {
+      "code_guards": [
+        "require_admin_or_station_master"
+      ],
+      "file": "backend/routers/review.py",
+      "func": "get_api_review_prompts",
+      "host_token": false,
+      "level": "admin_or_sm",
+      "line": 157,
+      "note": ""
+    },
+    "GET /api/review/flagged-pool": {
+      "code_guards": [],
+      "file": "backend/routers/review.py",
+      "func": "flagged_pool",
+      "host_token": false,
+      "level": "public",
+      "line": 91,
+      "note": "游客：公开举报池，只含公开信息与聚合数字，不含汤底。"
+    },
+    "GET /api/review/queue/community": {
+      "code_guards": [
+        "require_admin_or_station_master"
+      ],
+      "file": "backend/routers/review.py",
+      "func": "community_queue",
+      "host_token": false,
+      "level": "admin_or_sm",
+      "line": 60,
+      "note": ""
+    },
+    "GET /api/review/queue/reviewed": {
+      "code_guards": [
+        "require_admin_or_station_master"
+      ],
+      "file": "backend/routers/review.py",
+      "func": "reviewed_queue",
+      "host_token": false,
+      "level": "admin_or_sm",
+      "line": 51,
+      "note": ""
+    },
+    "GET /api/review/queue/system": {
+      "code_guards": [
+        "require_admin_or_station_master"
+      ],
+      "file": "backend/routers/review.py",
+      "func": "review_queue",
+      "host_token": false,
+      "level": "admin_or_sm",
+      "line": 42,
+      "note": ""
+    },
+    "GET /api/review/{script_id}/community-votes": {
+      "code_guards": [],
+      "file": "backend/routers/review.py",
+      "func": "community_votes",
+      "host_token": false,
+      "level": "public",
+      "line": 141,
+      "note": "游客：社区点赞/点踩统计。"
+    },
+    "GET /api/review/{script_id}/report-votes": {
+      "code_guards": [],
+      "file": "backend/routers/review.py",
+      "func": "report_votes",
+      "host_token": false,
+      "level": "public",
+      "line": 123,
+      "note": "游客：举报投票统计，只有数字不含投票人。"
+    },
+    "GET /api/scripts": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/scripts.py",
+      "func": "list_scripts",
+      "host_token": false,
+      "level": "public",
+      "line": 18,
+      "note": ""
+    },
+    "GET /api/scripts/mine/list": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/scripts.py",
+      "func": "my_scripts",
+      "host_token": false,
+      "level": "user",
+      "line": 150,
+      "note": ""
+    },
+    "GET /api/scripts/range-stats": {
+      "code_guards": [],
+      "file": "backend/routers/scripts.py",
+      "func": "range_stats",
+      "host_token": false,
+      "level": "public",
+      "line": 73,
+      "note": ""
+    },
+    "GET /api/scripts/search": {
+      "code_guards": [],
+      "file": "backend/routers/scripts.py",
+      "func": "search",
+      "host_token": false,
+      "level": "public",
+      "line": 48,
+      "note": ""
+    },
+    "GET /api/scripts/tags/all": {
+      "code_guards": [],
+      "file": "backend/routers/scripts.py",
+      "func": "all_tags",
+      "host_token": false,
+      "level": "public",
+      "line": 62,
+      "note": ""
+    },
+    "GET /api/scripts/tags/hot": {
+      "code_guards": [],
+      "file": "backend/routers/scripts.py",
+      "func": "hot_tags",
+      "host_token": false,
+      "level": "public",
+      "line": 67,
+      "note": ""
+    },
+    "GET /api/scripts/{script_id}": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/scripts.py",
+      "func": "get_script",
+      "host_token": false,
+      "level": "public",
+      "line": 79,
+      "note": "未过审的稿子只有作者本人与管理员/站长可见，其余 404（原来只判 is_deleted）。"
+    },
+    "GET /api/scripts/{script_id}/comments": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/scripts.py",
+      "func": "get_comments",
+      "host_token": false,
+      "level": "public",
+      "line": 145,
+      "note": ""
+    },
+    "GET /api/scripts/{script_id}/download": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/scripts.py",
+      "func": "download",
+      "host_token": false,
+      "level": "user",
+      "line": 94,
+      "note": ""
+    },
+    "GET /api/scripts/{script_id}/like-status": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/scripts.py",
+      "func": "like_status",
+      "host_token": false,
+      "level": "user",
+      "line": 130,
+      "note": ""
+    },
+    "GET /api/site-settings": {
+      "code_guards": [],
+      "file": "backend/main.py",
+      "func": "public_site_settings",
+      "host_token": false,
+      "level": "public",
+      "line": 77,
+      "note": ""
+    },
+    "GET /api/stt/providers": {
+      "code_guards": [],
+      "file": "backend/routers/stt.py",
+      "func": "list_providers",
+      "host_token": false,
+      "level": "public",
+      "line": 76,
+      "note": ""
+    },
+    "GET /api/stt/status": {
+      "code_guards": [],
+      "file": "backend/routers/stt.py",
+      "func": "status",
+      "host_token": false,
+      "level": "public",
+      "line": 62,
+      "note": ""
+    },
+    "GET /api/tts/health": {
+      "code_guards": [],
+      "file": "backend/routers/tts.py",
+      "func": "tts_health",
+      "host_token": false,
+      "level": "public",
+      "line": 66,
+      "note": ""
+    },
+    "GET /api/tts/voices": {
+      "code_guards": [],
+      "file": "backend/routers/tts.py",
+      "func": "list_voices",
+      "host_token": false,
+      "level": "public",
+      "line": 106,
+      "note": ""
+    },
+    "GET /api/user/cloud-sync/download": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "cloud_sync_download",
+      "host_token": false,
+      "level": "user",
+      "line": 73,
+      "note": ""
+    },
+    "GET /api/user/game-data-save": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "get_game_data_save",
+      "host_token": false,
+      "level": "user",
+      "line": 90,
+      "note": ""
+    },
+    "GET /api/user/mcp-tokens": {
+      "code_guards": [
+        "require_login_not_token"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "list_mcp_tokens",
+      "host_token": false,
+      "level": "user",
+      "line": 127,
+      "note": ""
+    },
+    "GET /api/user/play-data/{script_id}": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "get_play_data",
+      "host_token": false,
+      "level": "user",
+      "line": 50,
+      "note": ""
+    },
+    "GET /api/user/play-sessions": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "list_play_sessions",
+      "host_token": false,
+      "level": "user",
+      "line": 56,
+      "note": ""
+    },
+    "GET /api/user/profile": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "get_profile",
+      "host_token": false,
+      "level": "user",
+      "line": 16,
+      "note": ""
+    },
+    "GET /api/user/stats": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/stats.py",
+      "func": "my_stats",
+      "host_token": false,
+      "level": "user",
+      "line": 19,
+      "note": ""
+    },
+    "GET /api/user/status-bar-save": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "get_status_bar_save",
+      "host_token": false,
+      "level": "user",
+      "line": 78,
+      "note": ""
+    },
+    "GET /api/user/subscriptions": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "list_subs",
+      "host_token": false,
+      "level": "user",
+      "line": 26,
+      "note": ""
+    },
+    "GET /api/user/subscriptions/{script_id}/status": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "sub_status",
+      "host_token": false,
+      "level": "user",
+      "line": 41,
+      "note": ""
+    },
+    "GET /api/users/{user_id}/followers": {
+      "code_guards": [],
+      "file": "backend/routers/stats.py",
+      "func": "followers",
+      "host_token": false,
+      "level": "public",
+      "line": 144,
+      "note": ""
+    },
+    "GET /api/users/{user_id}/following": {
+      "code_guards": [],
+      "file": "backend/routers/stats.py",
+      "func": "following",
+      "host_token": false,
+      "level": "public",
+      "line": 152,
+      "note": ""
+    },
+    "GET /api/users/{user_id}/profile": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/stats.py",
+      "func": "public_profile",
+      "host_token": false,
+      "level": "public",
+      "line": 49,
+      "note": ""
+    },
+    "GET /api/version": {
+      "code_guards": [],
+      "file": "backend/main.py",
+      "func": "version",
+      "host_token": false,
+      "level": "public",
+      "line": 138,
+      "note": ""
+    },
+    "GET /health": {
+      "code_guards": [],
+      "file": "backend/main.py",
+      "func": "health",
+      "host_token": false,
+      "level": "public",
+      "line": 97,
+      "note": ""
+    },
+    "POST /api/admin/achievements": {
+      "code_guards": [
+        "require_admin_or_station_master"
+      ],
+      "file": "backend/routers/stats.py",
+      "func": "admin_create_achievement",
+      "host_token": false,
+      "level": "admin_or_sm",
+      "line": 176,
+      "note": ""
+    },
+    "POST /api/admin/achievements/{achievement_id}/grant": {
+      "code_guards": [
+        "require_admin_or_station_master"
+      ],
+      "file": "backend/routers/stats.py",
+      "func": "admin_grant_achievement",
+      "host_token": false,
+      "level": "admin_or_sm",
+      "line": 241,
+      "note": ""
+    },
+    "POST /api/admin/announcements": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "create_announcement",
+      "host_token": false,
+      "level": "admin",
+      "line": 118,
+      "note": ""
+    },
+    "POST /api/admin/bgm/upload": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "upload_bgm",
+      "host_token": false,
+      "level": "admin",
+      "line": 97,
+      "note": ""
+    },
+    "POST /api/admin/npc-prompts": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "save_npc_prompt",
+      "host_token": false,
+      "level": "admin",
+      "line": 187,
+      "note": "**已废弃**：固定 410，指到 PUT /api/admin/npc-configs/{npc_id}/prompts/{prompt_type}。"
+    },
+    "POST /api/admin/trends": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "create_trend",
+      "host_token": false,
+      "level": "admin",
+      "line": 314,
+      "note": ""
+    },
+    "POST /api/admin/upload-banner": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "upload_banner",
+      "host_token": false,
+      "level": "admin",
+      "line": 79,
+      "note": ""
+    },
+    "POST /api/ai/proxy": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/ai_proxy.py",
+      "func": "ai_proxy",
+      "host_token": false,
+      "level": "public",
+      "line": 72,
+      "note": ""
+    },
+    "POST /api/auth/account/delete": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/auth.py",
+      "func": "delete_account",
+      "host_token": false,
+      "level": "user",
+      "line": 86,
+      "note": ""
+    },
+    "POST /api/auth/change-password": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/auth.py",
+      "func": "change_password",
+      "host_token": false,
+      "level": "user",
+      "line": 39,
+      "note": ""
+    },
+    "POST /api/auth/forgot-password": {
+      "code_guards": [],
+      "file": "backend/routers/auth.py",
+      "func": "forgot_password",
+      "host_token": false,
+      "level": "public",
+      "line": 44,
+      "note": ""
+    },
+    "POST /api/auth/guest-token": {
+      "code_guards": [],
+      "file": "backend/routers/auth.py",
+      "func": "guest_token",
+      "host_token": false,
+      "level": "public",
+      "line": 49,
+      "note": ""
+    },
+    "POST /api/auth/login": {
+      "code_guards": [],
+      "file": "backend/routers/auth.py",
+      "func": "login",
+      "host_token": false,
+      "level": "public",
+      "line": 29,
+      "note": ""
+    },
+    "POST /api/auth/realname-callback": {
+      "code_guards": [],
+      "file": "backend/routers/auth.py",
+      "func": "realname_callback",
+      "host_token": false,
+      "level": "public",
+      "line": 70,
+      "note": ""
+    },
+    "POST /api/auth/realname-verify": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/auth.py",
+      "func": "realname_verify",
+      "host_token": false,
+      "level": "user",
+      "line": 55,
+      "note": ""
+    },
+    "POST /api/auth/register": {
+      "code_guards": [],
+      "file": "backend/routers/auth.py",
+      "func": "register",
+      "host_token": false,
+      "level": "public",
+      "line": 24,
+      "note": ""
+    },
+    "POST /api/auth/send-code": {
+      "code_guards": [],
+      "file": "backend/routers/auth.py",
+      "func": "send_code",
+      "host_token": false,
+      "level": "public",
+      "line": 18,
+      "note": ""
+    },
+    "POST /api/game/free-chat": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/game.py",
+      "func": "free_chat",
+      "host_token": false,
+      "level": "public",
+      "line": 46,
+      "note": ""
+    },
+    "POST /api/game/{script_id}/ask": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/game.py",
+      "func": "ask_question",
+      "host_token": false,
+      "level": "public",
+      "line": 148,
+      "note": "未过审 423（作者/管理员可试玩）。"
+    },
+    "POST /api/game/{script_id}/complete": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/game.py",
+      "func": "complete_script",
+      "host_token": false,
+      "level": "user",
+      "line": 215,
+      "note": ""
+    },
+    "POST /api/game/{script_id}/hint": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/game.py",
+      "func": "get_hint",
+      "host_token": false,
+      "level": "public",
+      "line": 171,
+      "note": "只回通用盘问方向，**不再回吐汤底原句**；游客同样计数（5 次上限，落 guest_counters 表，按 IP 哈希）。"
+    },
+    "POST /api/game/{script_id}/reveal": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/game.py",
+      "func": "reveal_answer",
+      "host_token": false,
+      "level": "user",
+      "line": 199,
+      "note": ""
+    },
+    "POST /api/host/context": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/host.py",
+      "func": "build_context",
+      "host_token": false,
+      "level": "public",
+      "line": 396,
+      "note": ""
+    },
+    "POST /api/host/session/end": {
+      "code_guards": [],
+      "file": "backend/routers/host.py",
+      "func": "end_session",
+      "host_token": true,
+      "level": "public",
+      "line": 224,
+      "note": "只认主持证。settled 要先 narrated=true，否则 409。"
+    },
+    "POST /api/host/session/start": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/host.py",
+      "func": "start_session",
+      "host_token": false,
+      "level": "public",
+      "line": 93,
+      "note": "游客可开房（匿名会话 owner_user_id=null）。主持证不能开新场，会被 403。"
+    },
+    "POST /api/host/session/{session_id}/heartbeat": {
+      "code_guards": [],
+      "file": "backend/routers/host.py",
+      "func": "heartbeat",
+      "host_token": true,
+      "level": "public",
+      "line": 194,
+      "note": "只认主持证。报活不消耗遗言轮。"
+    },
+    "POST /api/host/session/{session_id}/narrated": {
+      "code_guards": [],
+      "file": "backend/routers/host.py",
+      "func": "mark_narrated",
+      "host_token": true,
+      "level": "public",
+      "line": 275,
+      "note": ""
+    },
+    "POST /api/host/session/{session_id}/settling": {
+      "code_guards": [],
+      "file": "backend/routers/host.py",
+      "func": "begin_settling",
+      "host_token": true,
+      "level": "public",
+      "line": 249,
+      "note": ""
+    },
+    "POST /api/log/client-event": {
+      "code_guards": [],
+      "file": "backend/routers/client_log.py",
+      "func": "client_event",
+      "host_token": false,
+      "level": "public",
+      "line": 39,
+      "note": ""
+    },
+    "POST /api/notifications/read": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/notification.py",
+      "func": "mark_read",
+      "host_token": false,
+      "level": "user",
+      "line": 26,
+      "note": ""
+    },
+    "POST /api/npc/ai-error-report": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/npc.py",
+      "func": "create_ai_error_report",
+      "host_token": false,
+      "level": "public",
+      "line": 54,
+      "note": ""
+    },
+    "POST /api/npc/issue-report": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/npc.py",
+      "func": "create_issue_report",
+      "host_token": false,
+      "level": "public",
+      "line": 38,
+      "note": ""
+    },
+    "POST /api/npc/prompts": {
+      "code_guards": [],
+      "file": "backend/routers/npc.py",
+      "func": "write_prompts_deprecated",
+      "host_token": false,
+      "level": "public",
+      "line": 122,
+      "note": ""
+    },
+    "POST /api/npc/report-refusal": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/npc.py",
+      "func": "report_refusal",
+      "host_token": false,
+      "level": "user",
+      "line": 248,
+      "note": ""
+    },
+    "POST /api/npc/review-log": {
+      "code_guards": [
+        "get_optional_user"
+      ],
+      "file": "backend/routers/npc.py",
+      "func": "create_review_log",
+      "host_token": false,
+      "level": "public",
+      "line": 17,
+      "note": ""
+    },
+    "POST /api/review/api-review-prompt": {
+      "code_guards": [
+        "require_admin_or_station_master"
+      ],
+      "file": "backend/routers/review.py",
+      "func": "save_api_review",
+      "host_token": false,
+      "level": "admin_or_sm",
+      "line": 147,
+      "note": ""
+    },
+    "POST /api/review/upload": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/review.py",
+      "func": "submit_for_review",
+      "host_token": false,
+      "level": "user",
+      "line": 30,
+      "note": ""
+    },
+    "POST /api/review/{script_id}/admin-review": {
+      "code_guards": [
+        "require_admin_or_station_master"
+      ],
+      "file": "backend/routers/review.py",
+      "func": "admin_review",
+      "host_token": false,
+      "level": "admin_or_sm",
+      "line": 69,
+      "note": ""
+    },
+    "POST /api/review/{script_id}/community-vote": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/review.py",
+      "func": "community_vote",
+      "host_token": false,
+      "level": "user",
+      "line": 130,
+      "note": ""
+    },
+    "POST /api/review/{script_id}/report": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/review.py",
+      "func": "report_script",
+      "host_token": false,
+      "level": "user",
+      "line": 97,
+      "note": ""
+    },
+    "POST /api/review/{script_id}/report-review": {
+      "code_guards": [
+        "require_admin_or_station_master"
+      ],
+      "file": "backend/routers/review.py",
+      "func": "report_review",
+      "host_token": false,
+      "level": "admin_or_sm",
+      "line": 80,
+      "note": ""
+    },
+    "POST /api/review/{script_id}/report-vote": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/review.py",
+      "func": "report_vote",
+      "host_token": false,
+      "level": "user",
+      "line": 112,
+      "note": ""
+    },
+    "POST /api/scripts/upload": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/scripts.py",
+      "func": "upload",
+      "host_token": false,
+      "level": "user",
+      "line": 105,
+      "note": ""
+    },
+    "POST /api/scripts/{script_id}/comment": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/scripts.py",
+      "func": "comment",
+      "host_token": false,
+      "level": "user",
+      "line": 140,
+      "note": ""
+    },
+    "POST /api/scripts/{script_id}/like": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/scripts.py",
+      "func": "toggle_like",
+      "host_token": false,
+      "level": "user",
+      "line": 125,
+      "note": ""
+    },
+    "POST /api/scripts/{script_id}/rate": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/scripts.py",
+      "func": "rate",
+      "host_token": false,
+      "level": "user",
+      "line": 120,
+      "note": ""
+    },
+    "POST /api/scripts/{script_id}/tags/{tag}/like": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/scripts.py",
+      "func": "toggle_tag_like",
+      "host_token": false,
+      "level": "user",
+      "line": 84,
+      "note": ""
+    },
+    "POST /api/stt": {
+      "code_guards": [],
+      "file": "backend/routers/stt.py",
+      "func": "recognize",
+      "host_token": false,
+      "level": "public",
+      "line": 41,
+      "note": ""
+    },
+    "POST /api/tts": {
+      "code_guards": [],
+      "file": "backend/routers/tts.py",
+      "func": "text_to_speech",
+      "host_token": false,
+      "level": "public",
+      "line": 81,
+      "note": ""
+    },
+    "POST /api/user/cloud-sync/upload": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "cloud_sync_upload",
+      "host_token": false,
+      "level": "user",
+      "line": 68,
+      "note": ""
+    },
+    "POST /api/user/mcp-tokens": {
+      "code_guards": [
+        "require_login_not_token"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "create_mcp_token",
+      "host_token": false,
+      "level": "user",
+      "line": 111,
+      "note": ""
+    },
+    "POST /api/user/stats/usage": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/stats.py",
+      "func": "report_usage",
+      "host_token": false,
+      "level": "user",
+      "line": 33,
+      "note": ""
+    },
+    "POST /api/user/subscriptions/{script_id}": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "subscribe",
+      "host_token": false,
+      "level": "user",
+      "line": 31,
+      "note": ""
+    },
+    "POST /api/users/{user_id}/follow": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/stats.py",
+      "func": "follow_user",
+      "host_token": false,
+      "level": "user",
+      "line": 118,
+      "note": ""
+    },
+    "PUT /api/admin/achievements/{achievement_id}": {
+      "code_guards": [
+        "require_admin_or_station_master"
+      ],
+      "file": "backend/routers/stats.py",
+      "func": "admin_update_achievement",
+      "host_token": false,
+      "level": "admin_or_sm",
+      "line": 211,
+      "note": ""
+    },
+    "PUT /api/admin/announcements/{ann_id}": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "update_announcement",
+      "host_token": false,
+      "level": "admin",
+      "line": 124,
+      "note": ""
+    },
+    "PUT /api/admin/banners": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "save_banners",
+      "host_token": false,
+      "level": "admin",
+      "line": 73,
+      "note": ""
+    },
+    "PUT /api/admin/free-ai-config": {
+      "code_guards": [
+        "require_owner"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "save_free_ai_config",
+      "host_token": false,
+      "level": "owner",
+      "line": 45,
+      "note": ""
+    },
+    "PUT /api/admin/free-trial-config": {
+      "code_guards": [
+        "require_owner"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "save_free_trial_config",
+      "host_token": false,
+      "level": "owner",
+      "line": 56,
+      "note": ""
+    },
+    "PUT /api/admin/npc-configs/{npc_id}": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/npc_config.py",
+      "func": "update_npc_config",
+      "host_token": false,
+      "level": "admin",
+      "line": 47,
+      "note": ""
+    },
+    "PUT /api/admin/npc-configs/{npc_id}/prompts/{prompt_type}": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/npc_config.py",
+      "func": "save_npc_prompt",
+      "host_token": false,
+      "level": "admin",
+      "line": 63,
+      "note": ""
+    },
+    "PUT /api/admin/review-prompts/{category}": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "update_review_prompt",
+      "host_token": false,
+      "level": "admin",
+      "line": 27,
+      "note": ""
+    },
+    "PUT /api/admin/site-settings/{key}": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "save_setting",
+      "host_token": false,
+      "level": "admin",
+      "line": 141,
+      "note": ""
+    },
+    "PUT /api/admin/trends/{item_id}": {
+      "code_guards": [
+        "require_admin"
+      ],
+      "file": "backend/routers/admin.py",
+      "func": "update_trend",
+      "host_token": false,
+      "level": "admin",
+      "line": 333,
+      "note": ""
+    },
+    "PUT /api/npc/prompts": {
+      "code_guards": [],
+      "file": "backend/routers/npc.py",
+      "func": "write_prompts_deprecated",
+      "host_token": false,
+      "level": "public",
+      "line": 122,
+      "note": ""
+    },
+    "PUT /api/scripts/{script_id}": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/scripts.py",
+      "func": "update",
+      "host_token": false,
+      "level": "user",
+      "line": 110,
+      "note": ""
+    },
+    "PUT /api/user/game-data-save": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "save_game_data_save",
+      "host_token": false,
+      "level": "user",
+      "line": 96,
+      "note": ""
+    },
+    "PUT /api/user/play-data/{script_id}": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "save_play_data",
+      "host_token": false,
+      "level": "user",
+      "line": 62,
+      "note": ""
+    },
+    "PUT /api/user/profile": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "save_profile",
+      "host_token": false,
+      "level": "user",
+      "line": 21,
+      "note": ""
+    },
+    "PUT /api/user/status-bar-save": {
+      "code_guards": [
+        "get_current_user"
+      ],
+      "file": "backend/routers/user.py",
+      "func": "save_status_bar_save",
+      "host_token": false,
+      "level": "user",
+      "line": 84,
+      "note": ""
+    }
+  }
+}

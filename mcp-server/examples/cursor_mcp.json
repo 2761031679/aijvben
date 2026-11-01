@@ -1,0 +1,13 @@
+{
+  "_说明": "Cursor 配置。全局放 ~/.cursor/mcp.json，或者项目里放 .cursor/mcp.json。装好后在 Cursor 设置 → MCP 里能看到 aijuben 是绿色。",
+  "mcpServers": {
+    "aijuben": {
+      "command": "python",
+      "args": ["-m", "aijuben_mcp.server"],
+      "env": {
+        "AIJUBEN_TOKEN": "mcp_把这里换成你在 AI剧本网 签发的门票",
+        "AIJUBEN_BASE_URL": "https://jvben.cn"
+      }
+    }
+  }
+}

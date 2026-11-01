@@ -1,0 +1,13 @@
+{
+  "_说明": "Claude Desktop 配置。Windows 放在 %APPDATA%\\Claude\\claude_desktop_config.json；macOS 放在 ~/Library/Application Support/Claude/claude_desktop_config.json。改完重启 Claude Desktop，工具会出现在输入框右下角的插头图标里。",
+  "mcpServers": {
+    "aijuben": {
+      "command": "python",
+      "args": ["-m", "aijuben_mcp.server"],
+      "env": {
+        "AIJUBEN_TOKEN": "mcp_把这里换成你在 AI剧本网 签发的门票",
+        "AIJUBEN_BASE_URL": "https://jvben.cn"
+      }
+    }
+  }
+}

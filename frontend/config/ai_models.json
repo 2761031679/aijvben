@@ -1,0 +1,43 @@
+{
+  "version": "2026-08-08",
+  "_comment": "AI 模型/端点单一数据源。前端 ai_client.js 与后端 ai_proxy.py 均读取本文件；更新模型列表只需修改本文件后重新 scp frontend 目录。defaultModel 必须与 models[0].id 一致。模型名严格区分大小写，须与厂商官方文档完全一致。火山引擎支持填接入点 ID（ep-xxxx）。",
+  "providers": {
+    "deepseek": {
+      "url": "https://api.deepseek.com/v1/chat/completions",
+      "defaultModel": "deepseek-v4-flash",
+      "models": [
+        { "id": "deepseek-v4-flash", "name": "DeepSeek-V4-Flash (1M上下文)" },
+        { "id": "deepseek-v4-pro", "name": "DeepSeek-V4-Pro" }
+      ]
+    },
+    "minimax": {
+      "url": "https://api.minimaxi.com/v1/text/chatcompletion_v2",
+      "defaultModel": "MiniMax-M3",
+      "models": [
+        { "id": "MiniMax-M3", "name": "MiniMax-M3 (旗舰, 1M上下文)" },
+        { "id": "MiniMax-M2.7", "name": "MiniMax-M2.7" },
+        { "id": "MiniMax-M2.7-highspeed", "name": "MiniMax-M2.7 高速版" },
+        { "id": "MiniMax-M2.5", "name": "MiniMax-M2.5" }
+      ]
+    },
+    "qwen": {
+      "url": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+      "defaultModel": "qwen3.8-max",
+      "models": [
+        { "id": "qwen3.8-max", "name": "千问3.8 Max (旗舰, 2.4T参数)" },
+        { "id": "qwen3.7-plus", "name": "千问3.7 Plus (均衡)" },
+        { "id": "qwen3.7-flash", "name": "千问3.7 Flash (轻量极速)" }
+      ]
+    },
+    "volcengine": {
+      "url": "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
+      "defaultModel": "doubao-seed-2-1-turbo-260628",
+      "models": [
+        { "id": "doubao-seed-2-1-turbo-260628", "name": "火山引擎 Seed 2.1 Turbo" },
+        { "id": "doubao-seed-2-1-pro-260628", "name": "火山引擎 Seed 2.1 Pro" },
+        { "id": "doubao-seed-2-1-lite-260628", "name": "火山引擎 Seed 2.1 Lite" },
+        { "id": "doubao-seed-evolving", "name": "火山引擎 Seed Evolving (持续进化)" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "scale": 80,
+  "portrait_url": "",
+  "enabled_emotions": [
+    "happy",
+    "laugh",
+    "thinking",
+    "surprised",
+    "sad",
+    "angry",
+    "closeeye",
+    "mysterious",
+    "dazed"
+  ],
+  "enabled_actions": [],
+  "emotion_effects": {},
+  "methods": [
+    {
+      "id": "m_default",
+      "name": "微笑",
+      "portrait": "laugh.png",
+      "anim": "",
+      "prompt": ""
+    },
+    {
+      "id": "m1791608194885",
+      "name": "大笑",
+      "portrait": "happy.png",
+      "anim": "shiver1",
+      "prompt": ""
+    },
+    {
+      "id": "m1791608201391",
+      "name": "思考",
+      "portrait": "thinking.png",
+      "anim": "",
+      "prompt": ""
+    },
+    {
+      "id": "m1791608208568",
+      "name": "惊讶",
+      "portrait": "surprised.png",
+      "anim": "",
+      "prompt": ""
+    },
+    {
+      "id": "m1791608213818",
+      "name": "难过",
+      "portrait": "sad.png",
+      "anim": "",
+      "prompt": ""
+    },
+    {
+      "id": "m1791608223625",
+      "name": "生气",
+      "portrait": "angry.png",
+      "anim": "hop1",
+      "prompt": ""
+    },
+    {
+      "id": "m1791608235371",
+      "name": "闭眼",
+      "portrait": "closeeye.png",
+      "anim": "",
+      "prompt": ""
+    },
+    {
+      "id": "m1791608242320",
+      "name": "神秘",
+      "portrait": "wink.png",
+      "anim": "",
+      "prompt": ""
+    },
+    {
+      "id": "m1791608246180",
+      "name": "呆滞",
+      "portrait": "dazed.png",
+      "anim": "sink",
+      "prompt": ""
+    }
+  ],
+  "emotion_methods": {
+    "happy": "m_default",
+    "laugh": "m1791608194885",
+    "wink": "",
+    "thinking": "m1791608201391",
+    "surprised": "m1791608208568",
+    "sad": "m1791608213818",
+    "grief": "",
+    "angry": "m1791608223625",
+    "closeeye": "m1791608235371",
+    "mysterious": "m1791608242320",
+    "dazed": "m1791608246180"
+  },
+  "voice": "zh-CN-XiaoxiaoNeural"
+}

@@ -1,0 +1,9 @@
+{
+  "可用标记": [
+    "[emotion:default] 微笑",
+    "[emotion:happy] 开心",
+    "[emotion:thinking] 歪头",
+    "[action:nod] 点头",
+    "[tool:search_scripts:关键词] 搜索剧本"
+  ]
+}

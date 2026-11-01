@@ -1,0 +1,129 @@
+{
+  "generated_by": "tools/golden/capture.js",
+  "prompt_source": "D:\\G\\2026.3.1市场模拟器\\AITurtleSoup\\server\\tools\\golden\\.src\\npc_configs",
+  "pb_sha256": "741e2ed0d6884277da05df3afd13125c3b905dd51bbb3e3bcfb900474b81afa5",
+  "prompts_sha256": "f6b3a368b1c277c10e1c6c8ef667ff551b456b1c26989529107348515ab466cf",
+  "count": 20,
+  "cases": [
+    {
+      "name": "01-default-dagou-new",
+      "note": "默认态 · 大狗 · 新玩家",
+      "bytes": 24860,
+      "logs": 1
+    },
+    {
+      "name": "02-default-xiaomei-veteran",
+      "note": "默认态 · 小梅 · 老玩家",
+      "bytes": 24646,
+      "logs": 1
+    },
+    {
+      "name": "03-default-xiaoshuai-regular",
+      "note": "默认态 · 小帅 · 普通玩家",
+      "bytes": 24796,
+      "logs": 1
+    },
+    {
+      "name": "04-default-jingyuniang-new",
+      "note": "默认态 · 鲸鱼娘 · 新玩家（未开放任何动画）",
+      "bytes": 24629,
+      "logs": 1
+    },
+    {
+      "name": "05-default-npc-null",
+      "note": "默认态 · 无 npcId → capability 为 null，G 节整体消失；且无私有提示词",
+      "bytes": 22852,
+      "logs": 3
+    },
+    {
+      "name": "06-default-no-player",
+      "note": "默认态 · 无 playerInfo → I 玩家信息 消失",
+      "bytes": 24361,
+      "logs": 2
+    },
+    {
+      "name": "07-default-npc-missing",
+      "note": "默认态 · alex（线上只有 soul+tools，无 iron_rules/guide/game_mode）",
+      "bytes": 24341,
+      "logs": 1
+    },
+    {
+      "name": "08-default-array-tools",
+      "note": "规则3 · 同类型 tools 两份 → 必须是数组 [私有, 共享]（线上常态）",
+      "bytes": 18361,
+      "logs": 1
+    },
+    {
+      "name": "09-browsing-dagou-new",
+      "note": "浏览态 · sidebar_guide 为空 → 回退 guide（子键名仍是「侧边栏状态引导」）",
+      "bytes": 24860,
+      "logs": 3
+    },
+    {
+      "name": "10-browsing-xiaomei-veteran",
+      "note": "浏览态 · 小梅 · 老玩家",
+      "bytes": 24646,
+      "logs": 3
+    },
+    {
+      "name": "11-browsing-xiaoshuai-regular",
+      "note": "浏览态 · 小帅 · 普通玩家",
+      "bytes": 24796,
+      "logs": 3
+    },
+    {
+      "name": "12-browsing-jingyuniang-new",
+      "note": "浏览态 · 鲸鱼娘 · 新玩家",
+      "bytes": 24629,
+      "logs": 3
+    },
+    {
+      "name": "13-browsing-no-player",
+      "note": "浏览态 · 无 playerInfo",
+      "bytes": 24361,
+      "logs": 4
+    },
+    {
+      "name": "14-experience-hgt-full",
+      "note": "体验态 · 海龟汤 · 完整条件表（endings+tasks+host_guide+线索道具）",
+      "bytes": 23861,
+      "logs": 1
+    },
+    {
+      "name": "15-experience-hgt-bare",
+      "note": "体验态 · 海龟汤 · 无条件表（旧剧本，条件结算系统空转）",
+      "bytes": 22748,
+      "logs": 1
+    },
+    {
+      "name": "16-experience-dnd",
+      "note": "体验态 · DND 跑团",
+      "bytes": 18205,
+      "logs": 1
+    },
+    {
+      "name": "17-experience-coc",
+      "note": "体验态 · COC 跑团",
+      "bytes": 18522,
+      "logs": 1
+    },
+    {
+      "name": "18-experience-acting",
+      "note": "体验态 · 剧本扮演",
+      "bytes": 17994,
+      "logs": 1
+    },
+    {
+      "name": "19-experience-no-inventory",
+      "note": "体验态 · 线索面板未激活 → E 组整体消失",
+      "bytes": 23591,
+      "logs": 2
+    },
+    {
+      "name": "20-experience-inactive-fallback",
+      "note": "体验态防御 · Experience 未激活 → 回退 default 配方（且必须打 warn）",
+      "bytes": 24850,
+      "logs": 2
+    }
+  ]
+}

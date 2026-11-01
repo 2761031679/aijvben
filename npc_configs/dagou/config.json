@@ -1,0 +1,33 @@
+{
+  "scale": 82,
+  "voice": "zh-CN-YunyangNeural",
+  "portrait_url": "",
+  "enabled_emotions": [
+    "happy",
+    "laugh",
+    "wink",
+    "thinking",
+    "surprised",
+    "sad",
+    "grief",
+    "angry",
+    "closeeye",
+    "mysterious"
+  ],
+  "enabled_actions": [
+    "hop1",
+    "hop2",
+    "hop-loop",
+    "shiver1",
+    "shiver2",
+    "shiver-loop",
+    "bigjump",
+    "damage",
+    "sink",
+    "shrink",
+    "grow"
+  ],
+  "emotion_effects": {},
+  "methods": [],
+  "emotion_methods": {}
+}

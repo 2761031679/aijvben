@@ -1,0 +1,92 @@
+{
+  "_说明": "API 获取教程配置（所有教程共用同一渲染模板）。steps[].image 为空时不渲染配图；videoUrl 为空时隐藏视频按钮；signupUrl 渲染为「前往注册」跳转按钮。新增/修改教程只改本文件。",
+  "volcengine": {
+    "name": "火山引擎",
+    "signupUrl": "https://signin.volcengine.com/auth/signup",
+    "videoUrl": "https://www.douyin.com/user/self?from_tab_name=main&modal_id=7688805607654100239",
+    "desktop": {
+      "title": "火山引擎 API 获取教程（电脑端）",
+      "steps": [
+        { "text": "打开火山引擎注册页（signin.volcengine.com/auth/signup），用手机号注册一个账号：输入手机号、填写验证码即可。也可以直接点击页面下方「前往注册」按钮跳转。", "image": "/static/img/tutorial/volcengine-1.png" },
+        { "text": "注册成功后需要完成「个人实名认证」——认证通过会赠送 50 万大模型 tokens 免费额度。", "image": "/static/img/tutorial/volcengine-2.png" },
+        { "text": "进入火山引擎控制台首页，点击头像旁的「未实名」小按钮进入实名认证（找不到时留意页面顶部账号信息一栏）。", "image": "/static/img/tutorial/volcengine-3.png" },
+        { "text": "注意：这里要选「个人认证」。推荐用「微信扫一扫 APP 扫脸认证」，点击对应的「立即认证」。", "image": "/static/img/tutorial/volcengine-4.png" },
+        { "text": "填写真实姓名与身份证号码并提交，然后用微信扫码完成人脸认证。", "image": "/static/img/tutorial/volcengine-5.png" },
+        { "text": "认证完成后回到控制台首页，点击左上角的「三」横线按钮，展开功能菜单。", "image": "/static/img/tutorial/volcengine-6.png" },
+        { "text": "在展开的菜单中找到「火山方舟」，点击进入 API 平台（之后的任何页面都可以用这个方法进入火山方舟）。", "image": "/static/img/tutorial/volcengine-7.png" },
+        { "text": "进入火山方舟控制台后，点击顶部的「模型广场」。", "image": "/static/img/tutorial/volcengine-8.png" },
+        { "text": "在模型广场下滑找到想用的模型。推荐 DeepSeek-V4-Flash 和 Doubao-Seed-Character：消耗少、能满足需求、响应也快。把鼠标悬停在模型卡片上会浮出详情卡片，点击其中的「API 接入」。", "image": "/static/img/tutorial/volcengine-9.png" },
+        { "text": "页面右侧会弹出「快速 API 接入」面板。在 STEP 1（获取 API KEY）中点击「创建 API Key」。", "image": "/static/img/tutorial/volcengine-10.png" },
+        { "text": "在 STEP 2 中：保持「安心体验」开关开启（额度用完会自动停止服务，不会产生扣费）；勾选同意选项后点击「开通模型」。嫌麻烦也可以直接「一键开通所有模型」。", "image": "/static/img/tutorial/volcengine-11.png" },
+        { "text": "开通成功后，页面下方会出现示例代码。本站只需要其中两项：API Key 和模型 ID（model，形如 doubao-seed-2.1-turbo-260628）。API 地址（base_url）不用管，本站已内置。", "image": "/static/img/tutorial/volcengine-12.png" },
+        { "text": "回到本站，打开「⚙ 设置 → AI 模型」标签页：AI 提供商选择「豆包(火山引擎)」，把 API Key 粘贴到「API Key」输入框，把模型 ID 粘贴到「模型」输入框，点击「保存设置」即可完成调用。", "image": "/static/img/tutorial/volcengine-13.png" }
+      ],
+      "videoUrl": "https://www.douyin.com/user/self?from_tab_name=main&modal_id=7688805607654100239"
+    },
+    "mobile": {
+      "title": "火山引擎 API 获取教程（手机端）",
+      "steps": [
+        { "text": "火山引擎手机端图文教程整理中。手机浏览器操作流程与电脑端基本一致：注册账号 → 个人实名认证 → 控制台左上角菜单进入「火山方舟」→ 模型广场选择模型 → 创建 API Key 并开通模型。", "image": "" },
+        { "text": "推荐先观看下方的视频教程（完整演示了全流程），或在电脑上按电脑端图文教程操作，拿到 API Key 和模型 ID 后回到本站设置中粘贴即可。", "image": "" }
+      ],
+      "videoUrl": "https://www.douyin.com/user/self?from_tab_name=main&modal_id=7688805607654100239"
+    }
+  },
+  "deepseek": {
+    "name": "DeepSeek",
+    "signupUrl": "https://platform.deepseek.com/sign_in",
+    "videoUrl": "",
+    "desktop": {
+      "title": "DeepSeek API 获取教程（电脑端）",
+      "steps": [
+        { "text": "DeepSeek 图文教程整理中，敬请期待。可先观看视频教程（如有），或到 DeepSeek 开放平台（platform.deepseek.com）注册并创建 API Key。", "image": "" }
+      ],
+      "videoUrl": ""
+    },
+    "mobile": {
+      "title": "DeepSeek API 获取教程（手机端）",
+      "steps": [
+        { "text": "DeepSeek 手机端图文教程整理中，敬请期待。", "image": "" }
+      ],
+      "videoUrl": ""
+    }
+  },
+  "qwen": {
+    "name": "通义千问",
+    "signupUrl": "https://bailian.console.aliyun.com/",
+    "videoUrl": "",
+    "desktop": {
+      "title": "通义千问 API 获取教程（电脑端）",
+      "steps": [
+        { "text": "通义千问图文教程整理中，敬请期待。可先到阿里云百炼平台（bailian.console.aliyun.com）注册并在 API-KEY 管理页创建 Key。", "image": "" }
+      ],
+      "videoUrl": ""
+    },
+    "mobile": {
+      "title": "通义千问 API 获取教程（手机端）",
+      "steps": [
+        { "text": "通义千问手机端图文教程整理中，敬请期待。", "image": "" }
+      ],
+      "videoUrl": ""
+    }
+  },
+  "minimax": {
+    "name": "MiniMax",
+    "signupUrl": "https://platform.minimaxi.com/",
+    "videoUrl": "",
+    "desktop": {
+      "title": "MiniMax API 获取教程（电脑端）",
+      "steps": [
+        { "text": "MiniMax 图文教程整理中，敬请期待。可先到 MiniMax 开放平台（platform.minimaxi.com）注册并创建 API Key。", "image": "" }
+      ],
+      "videoUrl": ""
+    },
+    "mobile": {
+      "title": "MiniMax API 获取教程（手机端）",
+      "steps": [
+        { "text": "MiniMax 手机端图文教程整理中，敬请期待。", "image": "" }
+      ],
+      "videoUrl": ""
+    }
+  }
+}

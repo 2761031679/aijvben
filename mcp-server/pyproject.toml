@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aijuben-mcp"
+version = "0.1.0"
+description = "AI剧本网（jvben.cn）的 MCP 插件：把站点接口包成 MCP 工具，让任意 AI 客户端充当海龟汤主持人 / 替玩家办事"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Proprietary" }
+authors = [{ name = "AI剧本网" }]
+keywords = ["mcp", "aijuben", "jvben", "turtle-soup", "hai-gui-tang"]
+dependencies = [
+  # MCP 官方 Python SDK。1.x 与 2.x 都支持：2.x 把 FastMCP 改名成 MCPServer，
+  # aijuben_mcp/server.py 里有兼容层自动选择（见 README「Python SDK 版本」）。
+  "mcp>=1.2",
+  "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+dev = ["mcp>=1.2", "httpx>=0.27"]
+
+[project.scripts]
+aijuben-mcp = "aijuben_mcp.server:main"
+
+[tool.setuptools]
+packages = ["aijuben_mcp", "aijuben_mcp.tools"]
+
+[tool.setuptools.package-data]
+aijuben_mcp = ["../contract.schema.json"]

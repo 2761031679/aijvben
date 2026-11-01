@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI剧本网</title>
+    <link rel="icon" type="image/png" href="/static/logo.png">
+    <link rel="apple-touch-icon" href="/static/logo.png">
+    <link rel="stylesheet" href="/static/css/style.css?v=v27">
+    <link rel="stylesheet" href="/static/css/components.css?v=v5">
+</head>
+<body>
+
+    <!-- ==================== 茶馆 2.5D 场景 ==================== -->
+
+    <!-- 背景层 -->
+    <div id="teahouse-bg"></div>
+
+    <!-- ===== 左上角打赏区 ===== -->
+    <div id="rewardEntry">
+        <button id="rewardBtn" class="corner-btn" title="请作者吃一顿早饭">💗 <span>打赏</span></button>
+        <div id="rewardPanel" class="corner-panel reward-panel">
+            <div class="corner-panel-title">💗 请作者吃一顿早饭</div>
+            <div class="reward-qr-row">
+                <div class="reward-qr-item">
+                    <img src="/static/reward_wechat.jpg" alt="微信打赏码" onerror="this.parentNode.style.display='none'">
+                    <span>微信打赏</span>
+                </div>
+                <div class="reward-qr-item">
+                    <img src="/static/reward_alipay.png" alt="支付宝收款码" onerror="this.parentNode.style.display='none'">
+                    <span>支付宝</span>
+                </div>
+            </div>
+            <div class="corner-panel-note">打赏完全自愿，感谢每一位支持者 🍳</div>
+        </div>
+    </div>
+
+    <!-- ===== 右上角用户区 ===== -->
+    <div id="teahouse-user-area">
+        <!-- 交流入口（登录/未登录均可见） -->
+        <div id="chatEntry">
+            <button id="chatBtn" class="corner-btn" title="加入交流">💬 <span>交流</span></button>
+            <div id="chatPanel" class="corner-panel chat-panel"></div>
+        </div>
+        <div id="teahouse-guest-btns" class="tea-user-btns">
+            <button class="tea-user-btn" onclick="showAuthModal('login')">🔑 登录</button>
+            <button class="tea-user-btn" onclick="showAuthModal('register')">📝 注册</button>
+        </div>
+        <div id="teahouse-user-info" class="tea-user-info" style="display:none">
+            <span class="tea-bell" id="teaBell" title="通知" onclick="NotificationCenter.toggle()">🔔<span class="bell-badge" id="bellBadge" style="display:none">0</span></span>
+            <span class="tea-user-avatar" id="teaUserAvatar" title="个人中心" style="cursor:pointer" onclick="UserCenter.open()">👤</span>
+            <span class="tea-user-name" id="teaUserName" style="cursor:pointer" onclick="UserCenter.open()"></span>
+            <button class="tea-user-btn" onclick="logout()">🚪</button>
+        </div>
+    </div>
+
+    <!-- NPC 切换下拉菜单 -->
+    <div id="npcDropdown" class="npc-dropdown">
+        <div class="npc-dropdown-header">选择 NPC</div>
+        <div class="npc-dropdown-list" id="npcDropdownList"></div>
+    </div>
+
+    <!-- ===== 左侧玩家剪影 ===== -->
+    <div id="teahouse-player" aria-hidden="true">
+        <div class="player-silhouette">
+            <div class="player-headband"></div>
+        </div>
+    </div>
+
+    <!-- ===== 右侧 NPC ===== -->
+    <div id="teahouse-npc"></div>
+
+    <!-- ===== 屏幕中心 VBOX（聊天区） ===== -->
+    <div id="teahouse-vbox">
+        <div class="vbox-chat-area" id="teaChatArea" aria-label="NPC对话区">
+            <div class="chat-bubbles-container" id="chatBubblesContainer" role="log" aria-live="polite" aria-relevant="additions"></div>
+        </div>
+    </div>
+
+    <!-- 桌面 + 操作面板层 -->
+    <div id="teahouse-desk">
+        <div class="operation-panel">
+            <div class="tea-input-row">
+                <button class="tea-mini-btn" id="btnSettingsLeft" title="设置 / 切换 NPC" aria-label="设置或切换NPC">⚙️</button>
+                <button class="tea-mini-btn" id="btnToolPanel" title="工具面板（剧本体验时生效）" aria-label="工具面板">📋</button>
+                <input type="text" id="companionChatInput" placeholder="与 NPC 对话..." aria-label="与NPC对话输入框" autocomplete="off">
+                <button class="tea-mini-btn" id="btnVoice" title="语音输入" aria-label="语音输入">🎙</button>
+                <button class="tea-send-btn" aria-label="发送">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 自定义滚动条 ===== -->
+    <div id="custom-scrollbar"><div id="custom-scrollbar-thumb"></div></div>
+
+    <!-- ===== 右侧拉出箭头 ===== -->
+    <div id="teahouse-forum-arrow" onclick="openForumPanel()" title="打开剧本论坛">
+        <span class="forum-arrow-icon">◀</span>
+    </div>
+
+    <!-- ===== BGM 黑胶唱片播放器（PC 左下角，手机端隐藏） ===== -->
+    <div id="bgmPlayer"></div>
+
+    <!-- ==================== 论坛侧栏面板 ==================== -->
+    <div id="forumPanel" class="forum-panel">
+        <div class="forum-overlay" onclick="closeForumPanel()"></div>
+        <div class="forum-content">
+            <nav class="forum-nav">
+                <button class="forum-nav-close" onclick="closeForumPanel()">✕</button>
+                <div class="forum-nav-inner">
+                    <a href="#" onclick="navigateForum('home');return false;" class="forum-nav-item active">🏠 首页</a>
+                    <div class="forum-nav-group" id="scriptZoneGroup">
+                        <a href="#" onclick="openAllBoards();return false;" class="forum-nav-item forum-nav-group-toggle">
+                            <span>📚 剧本区</span><span class="nav-group-arrow">▸</span>
+                        </a>
+                        <div class="forum-nav-sub">
+                            <a href="#" onclick="navigateForum('board','hai-gui-tang');return false;" class="forum-nav-item forum-nav-subitem">🐢 海龟汤</a>
+                            <a href="#" onclick="navigateForum('board','dnd');return false;" class="forum-nav-item forum-nav-subitem">🐉 DND</a>
+                            <a href="#" onclick="navigateForum('board','coc');return false;" class="forum-nav-item forum-nav-subitem">🐙 COC</a>
+                            <a href="#" onclick="navigateForum('board','ju-ben-ban-yan');return false;" class="forum-nav-item forum-nav-subitem">🎭 剧本扮演</a>
+                        </div>
+                    </div>
+                    <a href="#" onclick="navigateForum('subscriptions');return false;" class="forum-nav-item">⭐ 收藏</a>
+                    <a href="#" onclick="navigateForum('my-works');return false;" class="forum-nav-item">📝 我的作品</a>
+                    <a href="#" onclick="navigateForum('review','community');return false;" class="forum-nav-item">🗳 审核</a>
+                    <a href="#" onclick="navigateForum('report-pool');return false;" class="forum-nav-item">🚩 举报池</a>
+                    <a href="#" id="navAdmin" onclick="navigateForum('admin');return false;" class="forum-nav-item" style="display:none;">⚙ 管理</a>
+                </div>
+            </nav>
+            <div class="forum-breadcrumb" id="forumBreadcrumb" style="display:none">
+                <a href="#" onclick="navigateForum('home');return false;">🏠 首页</a>
+            </div>
+            <div class="forum-body container" id="forumContent">
+                <div class="loading">加载中...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 个人中心侧栏面板 ==================== -->
+    <div id="userPanel" class="forum-panel">
+        <div class="forum-overlay" onclick="UserCenter.close()"></div>
+        <div class="forum-content">
+            <nav class="forum-nav">
+                <button class="forum-nav-close" onclick="UserCenter.close()">✕</button>
+                <div class="forum-nav-inner">
+                    <div class="forum-nav-item active">👤 个人中心</div>
+                </div>
+            </nav>
+            <div class="forum-body container" id="userPanelContent">
+                <div class="loading">加载中...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 页脚 ==================== -->
+    <footer class="site-footer">
+        <span>© 2026 AI剧本网</span>
+        <span class="site-footer-icp">
+            <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">赣ICP备2026020313号-1</a>
+        </span>
+        <span class="site-footer-icp">
+            <a href="https://beian.mps.gov.cn/#/query/webSearch?code=36118102000089" rel="noreferrer" target="_blank">
+                <img src="/static/gongan.png" alt="公安备案" class="icp-icon" onerror="this.style.display='none'">
+                赣公网安备36118102000089号
+            </a>
+        </span>
+    </footer>
+
+    <!-- ==================== 弹窗 ==================== -->
+
+    <!-- 登录/注册弹窗 -->
+    <div id="authModal" class="modal" style="display:none">
+        <div class="modal-content modal-sm">
+            <span class="modal-close" onclick="closeModal('authModal')">&times;</span>
+            <h2 id="authTitle">登录</h2>
+            <!-- 全站仅登录/注册表单声明标准 autocomplete 语义，浏览器只把这里识别为账号密码表单 -->
+            <form id="authForm" onsubmit="submitAuth(event)">
+                <input type="text" id="authUsername" class="form-input" placeholder="邮箱或用户名" required autocomplete="username">
+                <div id="registerFields" style="display:none">
+                    <input type="email" id="authEmail" class="form-input" placeholder="邮箱" autocomplete="email">
+                    <div class="code-row">
+                        <input type="text" id="authCode" class="form-input" placeholder="验证码" maxlength="6" autocomplete="one-time-code">
+                        <button type="button" class="btn btn-sm btn-outline" id="sendCodeBtn" onclick="sendRegCode()">发送验证码</button>
+                    </div>
+                </div>
+                <div class="password-row">
+                    <input type="password" id="authPassword" class="form-input" placeholder="密码" required minlength="6" autocomplete="current-password">
+                    <button type="button" class="toggle-pwd-btn" onclick="togglePassword('authPassword',this)" title="显示密码">👁</button>
+                </div>
+                <div id="registerFields2" style="display:none">
+                    <div class="password-row">
+                        <input type="password" id="authConfirmPassword" class="form-input" placeholder="确认密码" minlength="6" autocomplete="new-password">
+                        <button type="button" class="toggle-pwd-btn" onclick="togglePassword('authConfirmPassword',this)" title="显示密码">👁</button>
+                    </div>
+                    <div class="realname-notice" style="margin-top:10px;padding:8px 10px;background:rgba(201,169,110,0.08);border:1px solid rgba(201,169,110,0.25);border-radius:8px;font-size:12px;color:var(--text-muted);line-height:1.6;">
+                        🔞 根据国家规定，注册需年满 18 周岁，并通过「国家网络身份认证公共服务」实名核验（平台仅获取核验结果，不存储您的身份证件信息）。
+                    </div>
+                    <label class="register-agree" style="margin-top:10px;font-size:12px;color:var(--text-muted);display:flex;align-items:flex-start;gap:6px;cursor:pointer;">
+                        <input type="checkbox" id="authAgree" style="margin-top:2px;">
+                        <span>我已阅读并同意 <a href="#" onclick="showPolicyModal('privacy');return false;">《隐私政策》</a> 和 <a href="#" onclick="showPolicyModal('terms');return false;">《用户协议》</a></span>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" id="authSubmitBtn">登录</button>
+            </form>
+            <p id="authSwitch" class="auth-switch" style="text-align:center;margin-top:12px;font-size:13px;">
+                还没有账号？<a href="#" onclick="toggleAuthMode()">立即注册</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- 隐私政策弹窗 -->
+    <div id="policyPrivacyModal" class="modal" style="display:none">
+        <div class="modal-content" style="max-width:640px;max-height:80vh;overflow-y:auto;">
+            <span class="modal-close" onclick="closeModal('policyPrivacyModal')">&times;</span>
+            <h2>隐私政策</h2>
+            <div style="font-size:13px;line-height:1.8;color:var(--text-secondary);">
+                <p>AI剧本网（以下简称"本平台"）非常重视您的个人信息保护。本政策依据《个人信息保护法》《网络安全法》及 GB/T 35273-2020《信息安全技术 个人信息安全规范》制定。</p>
+                <h3>一、我们收集的信息</h3>
+                <p>1. 注册信息：用户名、电子邮箱、密码（加密存储）。</p>
+                <p>2. 实名认证：仅获取"是否通过核验"及"是否年满18周岁"的结果，不采集、不存储您的身份证号码、姓名等身份证件信息。</p>
+                <p>3. 使用记录：浏览、点赞、收藏、下载等操作日志（用于安全审计，保留60日）。</p>
+                <h3>二、信息的使用</h3>
+                <p>仅用于：账号注册与登录、内容发布与审核、安全审计、未成年人保护。未经您同意，不用于其他目的。</p>
+                <h3>三、信息的存储与保护</h3>
+                <p>密码经加密存储；传输采用加密通道；访问日志保留60日后自动清理。我们采取必要的技术措施防止信息泄露、篡改、丢失。</p>
+                <h3>四、信息的共享</h3>
+                <p>除法律法规要求或国家机关依法查询外，我们不会向任何第三方共享您的个人信息。</p>
+                <h3>五、您的权利</h3>
+                <p>您有权查询、更正、删除您的个人信息，并有权注销账号。注销账号后，您的个人身份信息将被清除。</p>
+                <h3>六、未成年人保护</h3>
+                <p>本平台要求用户年满18周岁。我们仅获取年龄段标识用于履行未成年人保护义务。</p>
+                <h3>七、联系方式</h3>
+                <p>如对本政策有任何疑问，请联系平台管理员。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 用户协议弹窗 -->
+    <div id="policyTermsModal" class="modal" style="display:none">
+        <div class="modal-content" style="max-width:640px;max-height:80vh;overflow-y:auto;">
+            <span class="modal-close" onclick="closeModal('policyTermsModal')">&times;</span>
+            <h2>用户协议</h2>
+            <div style="font-size:13px;line-height:1.8;color:var(--text-secondary);">
+                <h3>一、服务说明</h3>
+                <p>本平台提供海龟汤、DND、COC、剧本扮演等剧本的分享与体验服务。</p>
+                <h3>二、用户行为规范</h3>
+                <p>1. 您应年满18周岁并使用真实信息注册。</p>
+                <p>2. 不得上传、发布违反法律法规或公序良俗的内容。</p>
+                <p>3. 上传的剧本须为原创或已获授权。</p>
+                <h3>三、内容审核</h3>
+                <p>发布内容须经 AI 初审与人工复审。被举报的作品将立即进入待审核状态。</p>
+                <h3>四、知识产权</h3>
+                <p>您上传的剧本，您保留著作权；本平台仅获得展示与传播的必要授权。</p>
+                <h3>五、账号注销</h3>
+                <p>您可在个人中心注销账号，注销后个人身份信息将被清除。</p>
+                <h3>六、免责声明</h3>
+                <p>因不可抗力、第三方原因导致的服务中断，本平台不承担责任。</p>
+                <h3>七、协议变更</h3>
+                <p>本协议如有变更，将在本页面公示。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- NPC 设置弹窗 -->
+    <div id="npcSettingsModal" class="modal" style="display:none">
+        <div class="modal-content modal-lg">
+            <span class="modal-close" onclick="NpcChat.closeSettings()">&times;</span>
+            <h2>⚙ NPC 设置</h2>
+            <div class="settings-tabs">
+                <button class="admin-tab active" data-tab="ai" onclick="NpcChat._switchSettingsTab('ai')">🤖 AI 模型</button>
+                <button class="admin-tab" data-tab="npc" onclick="NpcChat._switchSettingsTab('npc')">🎭 NPC 配置</button>
+                <button class="admin-tab" data-tab="voice" onclick="NpcChat._switchSettingsTab('voice')">🎙 语音</button>
+                <button class="admin-tab" data-tab="text" onclick="NpcChat._switchSettingsTab('text')">🔤 文字</button>
+                <button class="admin-tab" data-tab="bgm" onclick="NpcChat._switchSettingsTab('bgm')">🎵 背景音乐</button>
+            </div>
+            <div id="settingsTabAi" class="settings-tab-panel" style="margin-top:16px;">
+                <div class="setting-group">
+                    <label>AI 提供商</label>
+                    <select id="cfgAiProvider" class="form-input" onchange="NpcChat._onProviderChange()">
+                        <option value="deepseek">DeepSeek</option>
+                        <option value="volcengine">火山引擎</option>
+                        <!-- 以下两个模型暂时未调整好，先关闭（2026-08-22，恢复时取消注释即可）：
+                        <option value="minimax">MiniMax</option>
+                        <option value="qwen">千问 (阿里百炼)</option>
+                        -->
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label>模型（可自由填写，火山引擎可填接入点 ID，如 ep-xxxx）</label>
+                    <input type="text" id="cfgAiModel" class="form-input" list="cfgAiModelList" placeholder="模型名或接入点 ID..." autocomplete="off">
+                    <datalist id="cfgAiModelList"></datalist>
+                </div>
+                <div class="setting-group">
+                    <label>API Key</label>
+                    <div class="password-row api-key-row">
+                        <!-- autocomplete="new-password" + 密码管理器忽略属性：避免浏览器把它当作登录密码弹出「保存密码」 -->
+                        <input type="password" id="cfgAiKey" class="form-input" placeholder="输入 API Key..." autocomplete="new-password" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other">
+                        <button type="button" class="toggle-pwd-btn" onclick="togglePassword('cfgAiKey',this)" title="显示">👁</button>
+                        <button type="button" class="btn btn-sm btn-outline" onclick="NpcChat.openApiTutorial()" title="查看当前提供商的 API Key 申请教程">获取 API</button>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label>审核 NPC 复核（内容安全）</label>
+                    <label class="switch"><input type="checkbox" id="cfgReviewNpcEnabled" checked><span class="slider"></span></label>
+                    <span style="font-size:12px;color:var(--text-muted);display:block;margin-top:4px;">开启后 NPC 每条回复先由审核 NPC 复核再展示（会消耗双倍 token）。关闭将导致输出不稳定、有风险，建议保持开启。</span>
+                </div>
+            </div>
+            <div id="settingsTabNpc" class="settings-tab-panel" style="display:none;margin-top:16px;">
+                <div class="setting-group">
+                    <label>切换 NPC</label>
+                    <select id="cfgDefaultNpc" class="form-input">
+                        <option value="jingyuniang">deepseek鲸鱼娘</option>
+                        <option value="xiaoshuai">小帅</option>
+                        <option value="xiaomei">小美</option>
+                        <option value="dagou">大狗</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label>文字速度 (ms)</label>
+                    <input type="range" id="cfgTypewriterSpeed" class="form-input" min="10" max="200" value="30" style="padding:0;">
+                    <span id="cfgTypewriterSpeedVal" style="font-size:12px;color:var(--text-muted);">30ms</span>
+                </div>
+            </div>
+            <div id="settingsTabText" class="settings-tab-panel" style="display:none;margin-top:16px;">
+                <div class="setting-group">
+                    <label>正文字号</label>
+                    <input type="range" id="cfgFontSize" class="form-input" min="12" max="24" value="16" style="padding:0;">
+                    <span id="cfgFontSizeVal" style="font-size:12px;color:var(--text-muted);">16px</span>
+                </div>
+                <div class="setting-group">
+                    <label>字体</label>
+                    <select id="cfgFontFamily" class="form-input">
+                        <option value="system">系统默认</option>
+                        <option value="noto">思源黑体（可商用）</option>
+                        <option value="wenkai">霞鹜文楷（可商用）</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label>正文加粗</label>
+                    <label class="switch"><input type="checkbox" id="cfgFontBold"><span class="slider"></span></label>
+                </div>
+                <div class="setting-group">
+                    <label>行高</label>
+                    <input type="range" id="cfgLineHeight" class="form-input" min="1.2" max="2.2" step="0.1" value="1.6" style="padding:0;">
+                    <span id="cfgLineHeightVal" style="font-size:12px;color:var(--text-muted);">1.6</span>
+                </div>
+                <div class="setting-group">
+                    <label>字间距</label>
+                    <input type="range" id="cfgLetterSpacing" class="form-input" min="0" max="4" step="0.5" value="0" style="padding:0;">
+                    <span id="cfgLetterSpacingVal" style="font-size:12px;color:var(--text-muted);">0px</span>
+                </div>
+                <div class="setting-group">
+                    <label>文字颜色</label>
+                    <input type="color" id="cfgTextColor" class="form-input" style="width:60px;height:36px;padding:2px;">
+                </div>
+                <div id="textScaleWarn" style="display:none;margin-top:10px;padding:10px 12px;border-radius:8px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);color:#f59e0b;font-size:12px;line-height:1.6;">
+                    检测到系统或浏览器修改了网页文字样式（文字被缩放约 <span id="textScaleVal"></span>%）。网站内设置的字号可能无法完全生效，请在系统「字体大小」或浏览器「文本缩放」设置中恢复 100% 后重试。
+                </div>
+            </div>
+            <div id="settingsTabVoice" class="settings-tab-panel" style="display:none;margin-top:16px;">
+                <div class="setting-group">
+                    <label>说话方式<span style="font-size:12px;color:var(--text-muted);">（同时只能生效一种）</span></label>
+                    <div class="speech-mode-list">
+                        <label class="speech-mode-item" id="speechModeOffItem"><input type="radio" name="cfgSpeechMode" value="off"><span><b>🔇 静音</b><span class="speech-mode-desc">NPC 只出字，不发声</span></span></label>
+                        <label class="speech-mode-item" id="speechModeBlipItem"><input type="radio" name="cfgSpeechMode" value="blip"><span><b>💬 说话音</b><span class="speech-mode-desc">打字时每字一下的电子音，不联网</span></span></label>
+                        <label class="speech-mode-item" id="speechModeSfxItem"><input type="radio" name="cfgSpeechMode" value="sfx"><span><b>📢 NPC 录音包</b><span class="speech-mode-desc" id="cfgSfxHint">NPC 有录音包时才可用</span></span></label>
+                        <label class="speech-mode-item" id="speechModeTtsItem"><input type="radio" name="cfgSpeechMode" value="tts"><span><b>🗣 合成朗读</b><span class="speech-mode-desc">把 NPC 说的话念出来</span></span></label>
+                    </div>
+                </div>
+                <div id="speechOptOff" class="speech-opt-block" style="display:none;">
+                    <div class="setting-group"><label style="font-weight:400;color:var(--text-muted);">当前为静音模式。需要声音时在上面换一种说话方式。</label></div>
+                </div>
+                <div id="speechOptBlip" class="speech-opt-block" style="display:none;">
+                    <div class="setting-group">
+                        <label>音高 <span style="font-size:12px;color:var(--text-muted);">（0.7 低沉 ~ 1.4 尖细）</span></label>
+                        <input type="range" id="cfgBlipPitch" class="form-input" min="0.7" max="1.4" step="0.05" value="1" style="padding:0;">
+                        <span id="cfgBlipPitchVal" style="font-size:12px;color:var(--text-muted);">1.00</span>
+                    </div>
+                    <div class="setting-group">
+                        <label>语速</label>
+                        <input type="range" id="cfgBlipSpeed" class="form-input" min="0.6" max="2" step="0.05" value="1.15" style="padding:0;">
+                        <span id="cfgBlipSpeedVal" style="font-size:12px;color:var(--text-muted);">1.15×</span>
+                    </div>
+                    <div class="setting-group">
+                        <label>音色</label>
+                        <select id="cfgBlipWave" class="form-input">
+                            <option value="triangle">三角波（软）</option>
+                            <option value="square">方波（清脆）</option>
+                            <option value="sine">正弦波（闷）</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
+                        <label>试听</label>
+                        <button type="button" class="btn btn-outline" id="cfgBlipTest">🔊 念一句</button>
+                    </div>
+                </div>
+                <div id="speechOptSfx" class="speech-opt-block" style="display:none;">
+                    <div class="setting-group">
+                        <label>录音包音量</label>
+                        <input type="range" id="cfgSfxVolume" class="form-input" min="0" max="100" value="80" style="padding:0;">
+                        <span id="cfgSfxVolumeVal" style="font-size:12px;color:var(--text-muted);">80%</span>
+                    </div>
+                </div>
+                <div id="speechOptTts" class="speech-opt-block" style="display:none;">
+                    <div class="setting-group">
+                        <label>朗读引擎</label>
+                        <select id="cfgTtsEngine" class="form-input">
+                            <option value="server">服务端合成（微软在线音色）</option>
+                            <option value="browser">系统合成（浏览器内置）</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
+                        <label>朗读音色</label>
+                        <select id="cfgVoiceId" class="form-input"></select>
+                    </div>
+                    <div class="setting-group">
+                        <label>朗读音量</label>
+                        <input type="range" id="cfgVoiceVolume" class="form-input" min="0" max="100" value="80" style="padding:0;">
+                        <span id="cfgVoiceVolumeVal" style="font-size:12px;color:var(--text-muted);">80%</span>
+                    </div>
+                    <div class="setting-group" id="ttsHealthRow">
+                        <label>服务端语音状态 <span id="cfgTtsHealth" style="font-size:12px;color:var(--text-muted);">检测中…</span></label>
+                        <button type="button" class="btn btn-sm btn-outline" id="cfgTtsRecheck">重新检测</button>
+                    </div>
+                </div>
+                <div class="setting-group" style="border-top:1px solid var(--border);padding-top:14px;margin-top:14px;">
+                    <label>读完自动播放下一段</label>
+                    <label class="switch"><input type="checkbox" id="cfgAutoAdvance"><span class="slider"></span></label>
+                </div>
+                <div class="setting-group">
+                    <label>语音识别引擎</label>
+                    <select id="cfgSttProvider" class="form-input"></select>
+                </div>
+            </div>
+            <div id="settingsTabBgm" class="settings-tab-panel" style="display:none;margin-top:16px;">
+                <div class="setting-group">
+                    <label>BGM 背景音乐<span style="font-size:12px;color:var(--text-muted);">（默认关闭，需要时再开）</span></label>
+                    <label class="switch"><input type="checkbox" id="cfgBgmEnabled"><span class="slider"></span></label>
+                </div>
+                <div class="setting-group">
+                    <label>主界面 BGM</label>
+                    <select id="cfgBgmMain" class="form-input"></select>
+                </div>
+                <div class="setting-group">
+                    <label>海龟汤体验 BGM</label>
+                    <select id="cfgBgmTurtleSoup" class="form-input"></select>
+                </div>
+                <div class="setting-group">
+                    <label>上传音频</label>
+                    <div class="bgm-upload-row">
+                        <input type="file" id="cfgBgmFile" accept=".mp3,.ogg,.wav,.m4a,.aac,.flac,audio/*" class="form-input">
+                        <button type="button" class="btn btn-sm btn-outline" id="cfgBgmUploadBtn" onclick="NpcChat._uploadBgm()">上传</button>
+                    </div>
+                    <div class="bgm-track-list" id="cfgBgmTrackList"></div>
+                    <span class="speech-mode-desc">上传后曲目会出现在上面两个下拉里；只有管理员/站长能上传。</span>
+                </div>
+                <div class="setting-group">
+                    <label>BGM 音量</label>
+                    <input type="range" id="cfgBgmVolume" class="form-input" min="0" max="100" value="50" style="padding:0;">
+                    <span id="cfgBgmVolumeVal" style="font-size:12px;color:var(--text-muted);">50%</span>
+                </div>
+            </div>
+            <div class="settings-save-row">
+                <button class="btn btn-primary" onclick="NpcChat.saveSettings()">💾 保存设置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- API 获取教程弹窗（通用模板：图文步骤 + 注册跳转 + 视频教程） -->
+    <div id="tutorialModal" class="modal" style="display:none">
+        <div class="modal-content modal-lg tutorial-modal">
+            <span class="modal-close" onclick="Tutorial.close()">&times;</span>
+            <div id="tutorialBody"></div>
+        </div>
+    </div>
+
+    <!-- 剧本详情弹窗 -->
+    <div id="detailModal" class="modal" style="display:none">
+        <div class="modal-content modal-lg">
+            <span class="modal-close" onclick="closeModal('detailModal')">&times;</span>
+            <div id="detailContent"></div>
+        </div>
+    </div>
+
+    <!-- 实名认证弹窗（国家网络身份认证公共服务 · 扫码认证） -->
+    <div id="realnameModal" class="modal" style="display:none">
+        <div class="modal-content modal-sm" style="text-align:center;">
+            <span class="modal-close" onclick="Realname.close()">&times;</span>
+            <h2>🪪 实名认证</h2>
+            <div id="realnameBox">
+                <div class="loading">加载中...</div>
+            </div>
+            <div style="margin-top:14px;">
+                <button class="btn" onclick="Realname.close()">暂时跳过</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast" style="display:none"></div>
+
+    <!-- ==================== 脚本加载 ==================== -->
+    <!-- 核心框架 -->
+    <script src="/static/js/core/state.js?v=v3"></script>
+    <script src="/static/js/core/events.js?v=v3"></script>
+    <script src="/static/js/core/api.js?v=v6"></script>
+    <script src="/static/js/core/ui_meta.js?v=v1"></script>
+    <script src="/static/js/core/host_client.js?v=v1"></script>
+    <script src="/static/js/core/router.js?v=v3"></script>
+
+    <!-- 共享模块 -->
+    <script src="/static/js/shared/constants.js?v=v10"></script>
+    <script src="/static/js/shared/store.js?v=v4"></script>
+    <script src="/static/js/shared/utils.js?v=v5"></script>
+    <script src="/static/js/shared/ai_client.js?v=v9"></script>
+    <script src="/static/js/shared/markdown.js?v=v1"></script>
+    <script src="/static/js/floating_hint.js?v=v1"></script>
+    <script src="/static/js/modules/ui/ui_locator.js?v=v2"></script>
+
+    <!-- 业务模块 -->
+    <script src="/static/js/modules/auth/auth.js?v=v5"></script>
+    <script src="/static/js/modules/account/init.js?v=v14"></script>
+    <script src="/static/js/modules/npc/animation.js?v=v7"></script>
+    <script src="/static/js/modules/npc/ui.js?v=v8"></script>
+    <script src="/static/js/modules/npc/system_texts.js?v=v3"></script>
+    <script src="/static/js/modules/npc/decoder.js?v=v1"></script>
+    <script src="/static/js/modules/npc/markers.js?v=v9"></script>
+    <script src="/static/js/modules/tutorial.js?v=v3"></script>
+    <script src="/static/js/modules/banner.js?v=v1"></script>
+    <script src="/static/js/modules/report_pool.js?v=v1"></script>
+    <script src="/static/js/modules/bgm.js?v=v1"></script>
+    <script src="/static/js/modules/sfx.js?v=v1"></script>
+    <script src="/static/js/modules/text_settings.js?v=v2"></script>
+    <script src="/static/js/modules/npc/segments.js?v=v6"></script>
+    <script src="/static/js/modules/npc/tools.js?v=v4"></script>
+    <script src="/static/js/modules/npc/system_channel.js?v=v2"></script>
+    <script src="/static/js/modules/npc/review_npc.js?v=v16"></script>
+    <script src="/static/js/modules/tts/blip.js?v=v2"></script>
+    <script src="/static/js/modules/npc/sfx.js?v=v1"></script>
+    <script src="/static/js/modules/npc/chat.js?v=v52"></script>
+    <script src="/static/js/modules/npc/bus.js?v=v6"></script>
+    <script src="/static/js/modules/npc/history.js?v=v4"></script>
+    <script src="/static/js/modules/npc/options.js?v=v3"></script>
+    <script src="/static/js/modules/npc/offline_npc.js?v=v5"></script>
+    <script src="/static/js/modules/npc/issue_report.js?v=v1"></script>
+    <script src="/static/js/modules/npc/no_ai.js?v=v8"></script>
+    <script src="/static/js/modules/scripts/service.js?v=v7"></script>
+    <script src="/static/js/modules/scripts/search-bar.js?v=v6"></script>
+    <script src="/static/js/modules/scripts/list.js?v=v8"></script>
+    <script src="/static/js/modules/scripts/detail.js?v=v9"></script>
+    <script src="/static/js/modules/scripts/upload.js?v=v3"></script>
+    <script src="/static/js/modules/admin/panel.js?v=v16"></script>
+    <script src="/static/js/modules/admin/achievements.js?v=v1"></script>
+    <script src="/static/js/modules/admin/demo.js?v=v7"></script>
+    <script src="/static/js/modules/game/state.js?v=v2"></script>
+    <script src="/static/js/modules/game/game_data_sync.js?v=v1"></script>
+    <script src="/static/js/modules/game/conditions.js?v=v5"></script>
+    <script src="/static/js/modules/game/inventory.js?v=v2"></script>
+    <script src="/static/js/modules/game/settlement.js?v=v3"></script>
+    <script src="/static/js/modules/game/game.js?v=v18"></script>
+    <script src="/static/js/modules/game/status_bar.js?v=v2"></script>
+    <script src="/static/js/modules/game/status_ui_mode.js?v=v2"></script>
+    <script src="/static/js/modules/game/status_ui_hp.js?v=v3"></script>
+    <script src="/static/js/modules/game/status_ui_conditions.js?v=v2"></script>
+    <script src="/static/js/modules/game/tool_panel.js?v=v3"></script>
+    <script src="/static/js/modules/game/turtle_soup_hud.js?v=v2"></script>
+    <script src="/static/js/modules/review/review.js?v=v3"></script>
+    <script src="/static/js/modules/community/community.js?v=v2"></script>
+    <script src="/static/js/modules/tts/tts.js?v=v6"></script>
+    <script src="/static/js/modules/tts/stt.js?v=v3"></script>
+    <script src="/static/js/modules/ui/ui.js?v=v4"></script>
+    <script src="/static/js/modules/user/user.js?v=v4"></script>
+    <script src="/static/js/modules/user/center.js?v=v6"></script>
+    <script src="/static/js/modules/user/realname.js?v=v3"></script>
+    <script src="/static/js/modules/notifications/center.js?v=v7"></script>
+
+    <!-- 应用入口 -->
+    <script src="/static/js/app.js?v=v12"></script>
+</body>
+</html>
